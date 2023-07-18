@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="./picsts/toshisearchlogo.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="./picsts/toshisearchlogo.ico" type="image/x-icon">
+  <meta name="description" content="Toshi Search is an early-stage version of Raretoshi Search. You can already explore and test its functionality. Further enhancements and improvements are in progress. Stay tuned for more updates and exciting features to come!">
+  <meta name="keywords" content="NFT search tool, RareToshi, Liquid Network, NFT analytics, NFT marketplace, NFT analysis, NFT search engine">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@RizzlingNFT">
+  <meta name="twitter:title" content="Toshi Search v0.2">
+  <meta name="twitter:description"
+    content="Toshi Search is an early-stage version of Raretoshi Search. You can already explore and test its functionality. Further enhancements and improvements are in progress. Stay tuned for more updates and exciting features to come!">
+  <meta name="twitter:image" content="https://peperium.site/imggs/toshisearchlogo.png">
+  <meta property="og:title" content="Toshi Search v0.2">
+  <meta property="og:description"
+    content="Toshi Search is an early-stage version of Raretoshi Search. You can already explore and test its functionality. Further enhancements and improvements are in progress. Stay tuned for more updates and exciting features to come!">
+  <meta property="og:image" content="https://peperium.site/imggs/toshisearchlogo.png">
+  <title>Toshi Search v0.2</title>
+  <link rel="stylesheet" href="./searchstyles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3.3.0/build/global/luxon.min.js"
+    integrity="sha256-Nn+JGDrq3PuTxcDfJmmI0Srj5LpfOFlKqEiPwQK7y40=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon/dist/chartjs-adapter-luxon.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
+  <style>
+    .cookie-banner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .cookie-banner p {
+      margin: 0;
+    }
+
+    .cookie-banner button {
+      margin-top: 5px;
+      background-color: #fff;
+      color: #333;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+  </style>
+  <script>
+    function setCookie(cname, cvalue, exdays) {
+      const d = new Date();
+      d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+      const expires = "expires=" + d.toUTCString();
+      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    function getCookie(cname) {
+      const name = cname + "=";
+      const decodedCookie = decodeURIComponent(document.cookie);
+      const ca = decodedCookie.split(';');
+      for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) === 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+
+    function checkCookie() {
+      const cookieBanner = document.querySelector('.cookie-banner');
+      const cookieAccepted = getCookie('cookieAccepted');
+      if (cookieAccepted !== '') {
+        cookieBanner.style.display = 'none';
+      }
+    }
+
+    function acceptCookies() {
+      setCookie('cookieAccepted', 'true', 365);
+      const cookieBanner = document.querySelector('.cookie-banner');
+      cookieBanner.style.display = 'none';
+    }
+
+    window.addEventListener('load', () => {
+      checkCookie();
+    });
+  </script>
+</head>
+
+<body>
+  <header>
+    <nav>
+      <div class="logo">
+        <a href="https://peperium.site/toshisearch">Toshi Search v0.2</a>
+      </div>
+      <div class="menu">
+        <input type="checkbox" id="menu-toggle">
+        <label for="menu-toggle" class="menu-icon">&#9776;</label>
+        <ul class="menu-items">
+          <li><a href="https://peperium.site">Rare Pepe Physicals</a></li>
+          <li><a href="#">Coming Soon</a></li>
+          <li><a href="#">Coming Soon</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section id="section1">
+      <div class="logo-container">
+        <img src="https://peperium.site/imggs/toshisearchlogo.png" alt="Toshi Search Logo">
+      </div>
+
+      <h3>Welcome to Toshi Search!</h3>
+      <h4>Toshi Search is an early-stage version of a powerful tool for exploring and analyzing NFTs on the Liquid Network at Raretoshi. With Toshi Search, you can dive into the functionality and experience firsthand the exciting features.
+
+        Discover a vast collection of NFTs, explore artist and collector statistics, track transactions, and search for specific artworks. Whether you're an artist, a collector, or simply curious about the world of NFTs, Toshi Search provides valuable insights and a seamless search experience.
+
+        Please note that Toshi Search is still under construction, and further enhancements and improvements are on the way. Stay tuned for updates as we continue to refine and expand this innovative platform.
+      </h4>
+
+      <div id="resultContainer2"></div>
+
+      <div class="chart-container">
+        <canvas id="myChart"></canvas>
+        <p id="noDataMessage" style="display: none;">No matching volume found!</p>
+      </div>
+
+      <div class="filter-container">
+        <label for="startDateInput">Start Date:</label>
+        <input type="date" id="startDateInput">
+        <label for="endDateInput">End Date:</label>
+        <input type="date" id="endDateInput">
+        <button id="applyFilterButton">Apply Filter</button>
+        <button id="toggleChartTypeButton">Toggle Chart Bar/Line</button>
+        <button id="resetChartButton">Show All</button>
+      </div>
+    </section>
+
+    <section id="section2" class="boxboard">
+      <div>
+        <h2>User</h2>
+        <div class="centerit">
+          <label for="userType">User type:</label>
+          <select id="userType">
+            <option value="">All</option>
+            <option value="true">Artist</option>
+            <option value="false">Other User</option>
+          </select>
+          <label for="userQuery">Username or wallet address:</label>
+          <input type="text" id="userQuery" />
+          <button id="userButton">Get User</button>
+        </div>
+        <div id="userResult" class="result-container"></div>
+      </div>
+
+      <div>
+        <h2>Collector</h2>
+        <div class="centerit">
+          <label for="collectorQuery">Explore collector stats:</label>
+          <input type="text" id="collectorQuery" />
+          <button id="collectorButton">Search collector</button>
+        </div>
+        <div id="collectorResult" class="result-container"></div>
+      </div>
+
+      <div>
+        <h2>Artist</h2>
+        <div class="centerit">
+          <label for="artistQuery">Explore artist stats:</label>
+          <input type="text" id="artistQuery" />
+          <button id="artistButton">Search artist</button>
+          <p id="searchCount"></p>
+        </div>
+        <div id="artistResult" class="result-container"></div>
+      </div>
+
+      <div>
+        <h2>Transactions</h2>
+        <p>Tip: If you struggle with long loading/rendering time for the transaction data try setting a (shorter)
+          time frame for your search. As of July 16th 2023 already 65.464 transaction were made at Raretoshi.</p>
+        <div class="centerit">
+          <label for="transactionType">Transaction type:</label>
+          <select id="transactionType">
+            <option value="">All</option>
+            <option value="purchase">Purchase</option>
+            <option value="creation">Create</option>
+            <option value="royalty">Set royalty</option>
+            <option value="accept">Accept offer</option>
+            <option value="release">Release/auction won</option>
+            <option value="auction">Auction</option>
+            <option value="cancel">Cancel</option>
+            <option value="deposit">Deposit asset</option>
+            <option value="withdrawal">Withdraw asset</option>
+          </select>
+          <label for="startDate">Start:</label>
+          <input type="date" id="startDate" />
+          <label for="endDate">End:</label>
+          <input type="date" id="endDate" />
+          <button id="transactionsButton">Search transactions</button>
+        </div>
+        <div>
+          <div id="resultCountContainer"></div>
+          <div id="transactionsResult" class="result-container"></div>
+        </div>
+      </div>
+
+      <div>
+        <h2>Artworks</h2>
+        <p>Tip: If you struggle with long loading/rendering time for the artworks data try to specify the input for
+          your search. As of July 16th 2023 already 3845 NFTs were minted at Raretoshi.</p>
+        <div class="centerit">
+          <label for="artworkQuery">Artwork name, liq. asset id or ticker:</label>
+          <input type="text" id="artworkQuery" />
+          <label for="ownerQuery">Owner:</label>
+          <input type="text" id="ownerQuery" />
+          <label for="artistQuery">Artist:</label>
+          <input type="text" id="artistQuery" />
+        </div>
+        <div class="centerit">
+          <label for="bidFilter">Show only with open bid:</label>
+          <input type="checkbox" id="bidFilter" />
+          <button id="artworkButton">Search artwork</button>
+        </div>
+        <div>
+          <div id="resultCountContainer1"></div>
+          <div id="artworkResult" class="result-container"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div id="centerit">
+      <p>Contact, request & support: <a href="mailto:contact@peperium.site">contact@peperium.site</a> --- Visit <a
+          href="https://www.raretoshi.com">Raretoshi</a><br /><br />Toshi Search v0.2 plattform provided by <a
+          href="https://peperium.site/policy">©2023 Rare Pepe Physicals (RPP)</a></p>
+    </div>
+  </footer>
+
+  <div class="cookie-banner">
+    <p>This website uses cookies to ensure you get the best experience. By continuing to use this website, you consent to the use of cookies.
+      <button onclick="acceptCookies()">Accept</button>
+    </p>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+
+</html>
